@@ -1,0 +1,40 @@
+name: Helm
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        default: internal
+      chart:
+        required: false
+        type: string
+        default: ./helm/
+    secrets:
+      configuration:
+        required: true
+
+jobs:
+  helm:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Update Deployment Status
+        uses: chrisgavin/update-deployment-action@7e0c34bcea2812ff0d3cc1ca46bcae2f9996f9d4
+        if: ${{ github.event_name == 'deployment' }}
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: Check
+        uses: pxdio/kubernetes-deploy-action@338bbc715b216e8ec0f39324ef69c2f06c8329f7
+        if: ${{ github.event_name != 'deployment' }}
+        with:
+          resources: ${{ inputs.chart }}
+      - name: Deploy
+        uses: pxdio/kubernetes-deploy-action@338bbc715b216e8ec0f39324ef69c2f06c8329f7
+        if: ${{ github.event_name == 'deployment' }}
+        with:
+          configuration: ${{ secrets.configuration }}
+          resources: ${{ inputs.chart }}
