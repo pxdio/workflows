@@ -1,0 +1,69 @@
+name: Docker
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: false
+        type: string
+        default: ubuntu-22.04
+      context:
+        required: false
+        type: string
+        default: ./
+      dockerfile:
+        required: false
+        type: string
+        default: ./Dockerfile
+      target:
+        required: false
+        type: string
+        default: ""
+      suffix:
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  docker:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Login to Registry
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
+        with:
+          registry: ghcr.io
+          username: x-oauth-token
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: Get Image Tag
+        id: tag
+        env:
+          DOCKER_BUILDKIT: "1"
+          TARGET: ${{ inputs.target }}
+          SUFFIX: ${{ inputs.suffix }}
+        run: |
+          tag="ghcr.io/$GITHUB_REPOSITORY"
+          if [ -n "$SUFFIX" ]; then
+            tag="$image/$SUFFIX"
+          fi
+          if [ -n "$TARGET" ]; then
+            tag="$image/$TARGET"
+          fi
+          echo "::set-output name=tag::$tag"
+          echo "$tag"
+      - name: Build Image
+        env:
+          DOCKER_BUILDKIT: "1"
+          DOCKERFILE: ${{ inputs.dockerfile }}
+          TARGET: ${{ inputs.target }}
+          CONTEXT: ${{ inputs.context }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: docker build --tag "$TAG" --file "$DOCKERFILE" --target "$TARGET" "$CONTEXT"
+      - name: Push Image
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: docker push "$TAG"
