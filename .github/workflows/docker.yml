@@ -48,11 +48,12 @@ jobs:
         run: |
           tag="ghcr.io/$GITHUB_REPOSITORY"
           if [ -n "$SUFFIX" ]; then
-            tag="$image/$SUFFIX"
+            tag="$tag/$SUFFIX"
           fi
           if [ -n "$TARGET" ]; then
-            tag="$image/$TARGET"
+            tag="$tag/$TARGET"
           fi
+          tag="$tag:$GITHUB_SHA"
           echo "::set-output name=tag::$tag"
           echo "$tag"
       - name: Build Image
