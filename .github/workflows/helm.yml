@@ -28,12 +28,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
       - name: Check
-        uses: pxdio/kubernetes-deploy-action@338bbc715b216e8ec0f39324ef69c2f06c8329f7
+        uses: pxdio/kubernetes-deploy-action@897859c640d5d5f4ea66bbe378ee8dce5b556fdd
         if: ${{ github.event_name != 'deployment' }}
         with:
           resources: ${{ inputs.chart }}
       - name: Deploy
-        uses: pxdio/kubernetes-deploy-action@338bbc715b216e8ec0f39324ef69c2f06c8329f7
+        uses: pxdio/kubernetes-deploy-action@897859c640d5d5f4ea66bbe378ee8dce5b556fdd
         if: ${{ github.event_name == 'deployment' }}
         with:
           configuration: ${{ secrets.configuration }}
