@@ -26,7 +26,7 @@ jobs:
         uses: chrisgavin/update-deployment-action@7e0c34bcea2812ff0d3cc1ca46bcae2f9996f9d4
         if: ${{ github.event_name == 'deployment' }}
       - name: Checkout
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - name: Check
         uses: pxdio/kubernetes-deploy-action@897859c640d5d5f4ea66bbe378ee8dce5b556fdd
         if: ${{ github.event_name != 'deployment' }}
