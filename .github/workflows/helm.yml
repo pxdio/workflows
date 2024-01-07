@@ -23,7 +23,7 @@ jobs:
       deployments: write
     steps:
       - name: Update Deployment Status
-        uses: chrisgavin/update-deployment-action@7e0c34bcea2812ff0d3cc1ca46bcae2f9996f9d4
+        uses: chrisgavin/update-deployment-action@c4606765d968b2611583ce40d0699dd81b116c0e
         if: ${{ github.event_name == 'deployment' }}
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
