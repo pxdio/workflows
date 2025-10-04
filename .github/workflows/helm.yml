@@ -27,7 +27,7 @@ jobs:
       id-token: write
     steps:
       - name: Update Deployment Status
-        uses: chrisgavin/update-deployment-action@c4606765d968b2611583ce40d0699dd81b116c0e
+        uses: chrisgavin/update-deployment-action@f579de2aa4c4fba051891d2869154b347e3428a1
         if: ${{ github.event_name == 'deployment' }}
       - name: Checkout
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
