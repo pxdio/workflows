@@ -37,7 +37,7 @@ jobs:
         with:
           resources: ${{ inputs.chart }}
       - name: Setup Clusters
-        uses: pxdio/kubernetes-setup-action@9d9ff01fa6415139782b25250ecc2b4eab236945
+        uses: pxdio/kubernetes-setup-action@e7a5b79b123d0aa649c9a6ce7658268ab4836a64
         if: ${{ github.event_name == 'deployment' }}
       - name: Deploy
         uses: pxdio/kubernetes-deploy-action@dff007d9364dc0e40d614b99adde5b610da33743
