@@ -11,9 +11,12 @@ on:
         required: false
         type: string
         default: ./helm/
+      clusters:
+        required: false
+        type: string
     secrets:
       configuration:
-        required: true
+        required: false
 
 jobs:
   helm:
@@ -21,6 +24,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      id-token: write
     steps:
       - name: Update Deployment Status
         uses: chrisgavin/update-deployment-action@c4606765d968b2611583ce40d0699dd81b116c0e
@@ -32,9 +36,13 @@ jobs:
         if: ${{ github.event_name != 'deployment' }}
         with:
           resources: ${{ inputs.chart }}
+      - name: Setup Clusters
+        uses: pxdio/kubernetes-setup-action@9d9ff01fa6415139782b25250ecc2b4eab236945
+        if: ${{ github.event_name == 'deployment' }}
       - name: Deploy
         uses: pxdio/kubernetes-deploy-action@dff007d9364dc0e40d614b99adde5b610da33743
         if: ${{ github.event_name == 'deployment' }}
         with:
           configuration: ${{ secrets.configuration }}
+          clusters: ${{ inputs.clusters }}
           resources: ${{ inputs.chart }}
