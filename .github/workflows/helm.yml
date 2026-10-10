@@ -37,7 +37,7 @@ jobs:
         with:
           resources: ${{ inputs.chart }}
       - name: Setup Kubernetes CLI
-        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
+        uses: azure/setup-kubectl@bda439f5f36b99b262ebdcd3613869bddb064c8e # v5.2.0
       - name: Setup Clusters
         uses: pxdio/kubernetes-setup-action@e7a5b79b123d0aa649c9a6ce7658268ab4836a64 # 0.0.2
         if: ${{ github.event_name == 'deployment' }}
